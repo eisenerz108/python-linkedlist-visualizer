@@ -1,12 +1,15 @@
 import tkinter as tk
+from Node import Node
+
+
 class LinkedListVisualizer:
     def __init__(self, root):
         self.root = root
         self.root.title("Linked List Visualizer")
-        self.canvas = tk.Canvas(self.root, width=800, height=400, bg="white")
+        self.canvas = tk.Canvas(self.root, width=1000, height=400, bg="white")
         self.canvas.pack()
 
-        self.linked_list = []
+        self.head = None  # Head of the linked list
         self.setup_gui()
 
     def setup_gui(self):
@@ -25,24 +28,43 @@ class LinkedListVisualizer:
     def add_node(self):
         data = self.data_entry.get()
         if data:
-            self.linked_list.append(data)
+            new_node = Node(data)
+            if not self.head:
+                self.head = new_node
+            else:
+                # Traverse to the last node and link the new node
+                current = self.head
+                while current.next:
+                    current = current.next
+                current.next = new_node
             self.data_entry.delete(0, tk.END)
             self.update_canvas()
 
     def reset(self):
-        self.linked_list = []
+        self.head = None
         self.canvas.delete("all")
 
     def update_canvas(self):
         self.canvas.delete("all")
         x, y = 50, 200
-        for data in self.linked_list:
-            # Draw node
-            self.canvas.create_rectangle(x, y, x + 50, y + 30, fill="lightblue")
-            self.canvas.create_text(x + 25, y + 15, text=data)
+        current = self.head
 
-            # Draw arrow
-            x += 70
-            if data != self.linked_list[-1]:
-                self.canvas.create_line(x - 20, y + 15, x, y + 15, arrow=tk.LAST)
+        while current:
+            # Draw node with two compartments
+            self.canvas.create_rectangle(x, y, x + 100, y + 30, fill="lightblue")  # Outer rectangle
+            self.canvas.create_line(x + 50, y, x + 50, y + 30)  # Divider
+
+            # Display data in the first compartment
+            self.canvas.create_text(x + 25, y + 15, text=current.data)
+
+            # Display last 4 digits of the next node's address in the second compartment
+            next_address = str(id(current.next))[-4:] if current.next else "None"
+            self.canvas.create_text(x + 75, y + 15, text=next_address)
+
+            # Draw arrow to the next node
+            if current.next:
+                self.canvas.create_line(x + 100, y + 15, x + 150, y + 15, arrow=tk.LAST)
+
+            x += 150  # Adjust spacing between nodes
+            current = current.next
 
