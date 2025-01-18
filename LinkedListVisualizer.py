@@ -1,5 +1,5 @@
-import tkinter as tk
 from Node import Node
+import tkinter as tk
 
 
 class LinkedListVisualizer:
@@ -61,10 +61,12 @@ class LinkedListVisualizer:
             next_address = str(id(current.next))[-4:] if current.next else "None"
             self.canvas.create_text(x + 75, y + 15, text=next_address)
 
+            # Display complete address of the current node below the rectangle
+            self.canvas.create_text(x + 50, y + 50, text=f"Addr: {id(current)}", fill="gray")
+
             # Draw arrow to the next node
             if current.next:
                 self.canvas.create_line(x + 100, y + 15, x + 150, y + 15, arrow=tk.LAST)
 
             x += 150  # Adjust spacing between nodes
             current = current.next
-
