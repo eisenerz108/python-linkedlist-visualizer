@@ -7,4 +7,7 @@
 2. Run the main.py
 3. A GUI will open
 4. Enter the value in the text for data and click on Create Node.
-5. 
+
+### Upcoming Changes
+1. Deletion of Node
+2. Insertion of Node in the middle of LinkedList
